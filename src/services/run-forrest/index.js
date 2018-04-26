@@ -1,6 +1,12 @@
+import { execSync } from 'child_process';
+import fs from 'fs';
 import OSRM from 'osrm';
 import Path from 'path';
 import Socket from 'socket.io';
+
+if (!fs.existsSync('../../../data/osrm/argentina')) {
+    execSync('sh scripts/download-osrm.sh', { cwd: __dirname + '/../../..' });
+}
 
 let osrm = new OSRM({ 
     algorithm: 'MLD',
