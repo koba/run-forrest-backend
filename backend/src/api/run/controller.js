@@ -40,6 +40,9 @@ export const state = ({ params }, res, next) =>
   Run.findById(params.id)
     .then(notFound(res))
     .then((run) => run ? run.view() : null)
-    .then((run) => runState(run.id) || { message: 'No state' })
-    .then(success(res))
+    .then((run) => runState(run.id))
+    .then((state) => {
+      if (!state) throw Error('No state');
+      else return success(res)(state);
+    })
     .catch(next)
