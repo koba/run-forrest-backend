@@ -29,7 +29,7 @@ export const openSocket = (user, res) => {
                     };
                 }
 
-                runners[data.user].coordinates.push([data.latitude, data.longitude]);
+                runners[data.user].coordinates.push([data.longitude, data.latitude]);
 
                 if (runners[data.user].coordinates.length >= 2) {
                     osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
