@@ -1,6 +1,6 @@
 const Socket = require('socket.io-client');
 
-var socket = Socket('http://localhost:' + process.argv[2]);
+var socket = Socket('https://ec2-34-237-245-91.compute-1.amazonaws.com:' + process.argv[2]);
 
 socket.emit('refresh', {
     user: '5ae0e171677187162a948b8a',
