@@ -31,10 +31,12 @@ export const openSocket = (user, res) => {
 
                 runners[data.user].coordinates.push([data.latitude, data.longitude]);
 
-                osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
-                    if (err) throw err;
-                    socket.client.emit('refresh', result);
-                });
+                if (runners[data.user].coordinates.length >= 2) {
+                    osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
+                        if (err) throw err;
+                        socket.emit('refresh', result);
+                    });
+                }
             });
 
         });
