@@ -4,7 +4,8 @@
   "main": "src",
   "private": true,
   "scripts": {
-    "prestart": "sh scripts/download-osrm.sh",
+    "build": "sh scripts/build.sh",
+    "heroku-prebuild": "npm run build",
     "start": "node .",
     "test": "jest",
     "coverage": "npm test -- --coverage",
