@@ -40,7 +40,7 @@ export const state = ({ params }, res, next) =>
   Run.findById(params.id)
     .then(notFound(res))
     .then((run) => run ? run.view() : null)
-    .then((run) => runState(run.id))
+    .then((run) => runState(params.id))
     .then((state) => {
       if (!state) throw Error('No state');
       else return success(res)(state);
