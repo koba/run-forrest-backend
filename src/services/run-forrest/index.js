@@ -4,15 +4,7 @@ import OSRM from 'osrm';
 import Path from 'path';
 import Socket from 'socket.io';
 
-if (!fs.existsSync('../../../data/osrm/argentina')) {
-    execSync('sh scripts/download-osrm.sh', { cwd: __dirname + '/../../..' });
-}
-
-let osrm = new OSRM({ 
-    algorithm: 'MLD',
-    path: Path.join(__dirname, '../../../data/osrm/argentina/argentina-latest.osrm'),
-    use_shared_memory: false
-});
+let osrm;
 
 let runners = {};
 
@@ -38,6 +30,18 @@ export const openSocket = (user, res) => {
                 runners[data.user].coordinates.push([data.longitude, data.latitude]);
 
                 if (runners[data.user].coordinates.length >= 2) {
+                    if (!osrm) {
+                        if (!fs.existsSync('../../../data/osrm/argentina')) {
+                            execSync('sh scripts/download-osrm.sh', { cwd: __dirname + '/../../..' });
+                        }
+                        
+                        osrm = new OSRM({ 
+                            algorithm: 'MLD',
+                            path: Path.join(__dirname, '../../../data/osrm/argentina/argentina-latest.osrm'),
+                            use_shared_memory: false
+                        });
+                    }
+
                     osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
                         if (err) throw err;
                         socket.emit('refresh', result);
