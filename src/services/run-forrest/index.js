@@ -1,5 +1,3 @@
-import { execSync } from 'child_process';
-import fs from 'fs';
 import OSRM from 'osrm';
 import Path from 'path';
 import Socket from 'socket.io';
