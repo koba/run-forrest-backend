@@ -1,7 +1,14 @@
-//import OSRM from 'osrm';
+import OSRM from 'osrm';
+import Path from 'path';
 import Socket from 'socket.io';
 
-//let osrm = new OSRM('../../../data/osrm/argentina/argentina-latest.osrm');
+let osrm = new OSRM({ 
+    algorithm: 'MLD',
+    path: Path.join(__dirname, '../../../data/osrm/argentina/argentina-latest.osrm'),
+    use_shared_memory: false
+});
+
+let runners = {};
 
 let sockets = {};
 
@@ -14,8 +21,20 @@ export const openSocket = (user, res) => {
 
         io.on('connection', (socket) => {
 
-            socket.on('accept-truck-request', (data) => {
-            
+            socket.on('refresh', (data) => {
+                if (!runners[data.user]) {
+                    runners[data.user] = {
+                        coordinates: [],
+                        distance: 0
+                    };
+                }
+
+                runners[data.user].coordinates.push([data.latitude, data.longitude]);
+
+                osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
+                    if (err) throw err;
+                    socket.client.emit('refresh', result);
+                });
             });
 
         });
