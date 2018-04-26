@@ -4,7 +4,7 @@
   "main": "src",
   "private": true,
   "scripts": {
-    "prestart": "if [ ! -d \"data/osrm/argentina\" ]; then wget -qO- https://s3.amazonaws.com/run-forrest/argentina.tar.gz | tar xvz -C data/osrm/argentina; fi",
+    "prestart": "sh scripts/download-osrm.sh",
     "start": "node .",
     "test": "jest",
     "coverage": "npm test -- --coverage",
