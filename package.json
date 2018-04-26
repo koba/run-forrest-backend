@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node .",
-    "start-mongodb": "./node_modules/.bin/mongod &",
+    "start-mongodb": "sudo service mongod start",
     "test": "jest",
     "coverage": "npm test -- --coverage",
     "postcoverage": "opn coverage/lcov-report/index.html",
