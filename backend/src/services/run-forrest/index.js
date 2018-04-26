@@ -8,7 +8,7 @@ let osrm = new OSRM({
     use_shared_memory: false
 });
 
-let runners = {};
+let runs = {};
 
 let sockets = {};
 
@@ -22,19 +22,27 @@ export const openSocket = (user, res) => {
         io.on('connection', (socket) => {
 
             socket.on('refresh', (data) => {
-                if (!runners[data.user]) {
-                    runners[data.user] = {
+                if (!runs[data.run]) {
+                    runs[data.run] = {
+                        runners: {}
+                    }
+                }
+
+                if (!runs[data.run]['runners'][data.user]) {
+                    runs[data.run]['runners'][data.user] = {
                         coordinates: [],
-                        distance: 0
+                        route: null
                     };
                 }
 
-                runners[data.user].coordinates.push([data.longitude, data.latitude]);
+                runs[data.run]['runners'][data.user].coordinates.push([data.longitude, data.latitude]);
 
-                if (runners[data.user].coordinates.length >= 2) {
-                    osrm.route({ coordinates: runners[data.user].coordinates }, (err, result) => {
+                if (runs[data.run]['runners'][data.user].coordinates.length >= 2) {
+                    osrm.route({ coordinates: runs[data.run]['runners'][data.user].coordinates }, (err, result) => {
                         if (err) throw err;
-                        socket.emit('refresh', result);
+                        
+                        runs[data.run]['runners'][data.user].route = result.routes[0],
+                        socket.emit('refresh', runs[data.run]['runners'][data.user]);
                     });
                 }
             });
@@ -54,3 +62,7 @@ export const openSocket = (user, res) => {
         port: sockets[user.id].port
     };
 };
+
+export const runState = (id) => {
+    return runs[id];
+}

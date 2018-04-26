@@ -1,4 +1,5 @@
 import { success, notFound } from '../../services/response/'
+import { runState } from '../../services/run-forrest'
 import { Run } from '.'
 
 export const create = ({ bodymen: { body } }, res, next) =>
@@ -33,4 +34,12 @@ export const destroy = ({ params }, res, next) =>
     .then(notFound(res))
     .then((run) => run ? run.remove() : null)
     .then(success(res, 204))
+    .catch(next)
+
+export const state = ({ params }, res, next) =>
+  Run.findById(params.id)
+    .then(notFound(res))
+    .then((run) => run ? run.view() : null)
+    .then((run) => runState(run.id) || { message: 'No state' })
+    .then(success(res))
     .catch(next)

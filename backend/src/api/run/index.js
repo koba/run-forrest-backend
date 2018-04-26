@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, update, destroy, state } from './controller'
 import { schema } from './model'
 export Run, { schema } from './model'
 
@@ -95,5 +95,11 @@ router.put('/:id',
 router.delete('/:id',
   token({ required: true, roles: ['admin'] }),
   destroy)
+
+/** new methods **/
+
+router.get('/:id/state',
+  token({ required: true }),
+  state)
 
 export default router
