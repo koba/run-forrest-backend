@@ -44,8 +44,8 @@ class App extends Component {
 
     this.setState({
       simulationRunners: [
-        { id: '1', latitude: runGeometry[0][0], longitude: runGeometry[0][1] },
-        { id: '2', latitude: runGeometry[0][0], longitude: runGeometry[0][1] }
+        { id: '1', latitude: runGeometry[0][0], longitude: runGeometry[0][1], color: '32cd32' },
+        { id: '2', latitude: runGeometry[0][0], longitude: runGeometry[0][1], color: 'ff4500' }
       ]
     })
 
@@ -53,15 +53,15 @@ class App extends Component {
     let distance2 = 0;
 
     setInterval(function () {
-      distance1 += 10;
-      distance2 += 12;
+      distance1 += 10.5;
+      distance2 += 10;
       let posRunner1 = that.pointAtDistance(runGeometry, distance1);
       let posRunner2 = that.pointAtDistance(runGeometry, distance2);
       let simulationRunners = that.state.simulationRunners;
       simulationRunners[0] = { ...simulationRunners[0], latitude: posRunner1[0], longitude: posRunner1[1] }
       simulationRunners[1] = { ...simulationRunners[1], latitude: posRunner2[0], longitude: posRunner2[1] }
       that.setState({ simulationRunners: simulationRunners });
-    }, 1000);
+    }, 1100);
   }
 
   pointAtDistance(geometry, metres) {
@@ -179,6 +179,7 @@ class App extends Component {
                     <Marker
                       key={runner.id}
                       position={{ lat: runner.latitude, lng: runner.longitude }}  
+                      icon={`http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=${runner.id}|${runner.color}`}
                     />
                   )
                 })
