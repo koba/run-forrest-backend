@@ -7,8 +7,6 @@ import api from './api'
 const app = express(apiRoot, api)
 const server = http.createServer(app)
 
-app.use('admin', express.static(__dirname + '/admin/build'))
-
 mongoose.connect(mongo.uri, { useMongoClient: true })
 mongoose.Promise = Promise
 
